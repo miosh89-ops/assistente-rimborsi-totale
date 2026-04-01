@@ -1,19 +1,26 @@
 import streamlit as st
 from groq import Groq
 
-# 1. Configurazione Pagina e SEO
-st.set_page_config(page_title="Rimborso Rapido AI - Ottieni i tuoi soldi", page_icon="⚖️")
+# 1. Configurazione Pagina
+st.set_page_config(page_title="SmartUtility Lab - Tutela Consumatori", page_icon="⚖️")
 
-# 2. Inizializzazione Client API
-try:
-    client = Groq(api_key=st.secrets["GROQ_API_KEY"])
-except Exception:
-    st.error("Errore: Chiave API non configurata nei Secrets di Streamlit.")
-    st.stop()
-
-# 3. Interfaccia Utente
-st.title("⚖️ Rimborso Rapido AI")
-st.markdown("### Recupera i tuoi soldi dagli e-commerce in 30 secondi.")
+# 2. Sidebar Professionale
+with st.sidebar:
+    st.image("https://img.icons8.com/color/96/000000/scales.png", width=80)
+    st.title("SmartUtility Lab")
+    st.markdown("---")
+    st.info("Sviluppiamo strumenti gratuiti per aiutare i cittadini. Se il tool ti è utile, offrici un caffè per sostenere i server.")
+    
+    # Pulsanti di Supporto
+    st.link_button("💳 Offri un caffè (Revolut)", "https://revolut.me/gdelgiudice94", use_container_width=True)
+    st.link_button("☕ Supporta il progetto", "https://www.buymeacoffee.com/SmartUtilityLab", use_container_width=True)
+    
+    st.markdown("---")
+    st.caption("© 2026 SmartUtility Lab")
+    
+# 3. Corpo Principale
+st.title("⚖️ SmartUtility Lab: Rimborsi")
+st.markdown("### Genera la tua diffida legale in 30 secondi.")
 
 # --- SIDEBAR: BRAND UNIVERSALE E PAGAMENTI ---
 with st.sidebar:
