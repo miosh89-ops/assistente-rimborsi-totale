@@ -15,6 +15,17 @@ except Exception:
 st.title("⚖️ Rimborso Rapido AI")
 st.markdown("### Recupera i tuoi soldi dagli e-commerce in 30 secondi.")
 
+# --- BARRA LATERALE (MONETIZZAZIONE ELEGANTE) ---
+with st.sidebar:
+    st.image("https://img.icons8.com/color/96/000000/scales.png", width=80)
+    st.title("Sponsor Ufficiale")
+    st.info("💳 Non farti più fregare online. Proteggi i tuoi acquisti futuri con una carta sicura e notifiche in tempo reale.")
+    st.link_button("👉 Richiedi Carta Revolut (Bonus)", "IL_TUO_LINK_REVOLUT", use_container_width=True)
+    
+    st.markdown("---")
+    st.write("Questo tool legale è 100% gratuito. Se ti ho fatto recuperare i tuoi soldi, considera di supportare il progetto:")
+    st.link_button("☕ Offrimi un caffè", "IL_TUO_LINK_DONAZIONE", use_container_width=True)
+    
 with st.container():
     negozio = st.text_input("Sito web dove hai acquistato (es: Amazon, Shein, Temu)")
     problema = st.selectbox("Seleziona il problema:", [
@@ -60,3 +71,14 @@ if st.button("GENERA DIFFIDA LEGALE"):
                 st.error(f"Errore tecnico: {e}")
     else:
         st.warning("Compila i campi obbligatori.")
+
+# --- RECENSIONI (RIPROVA SOCIALE) ---
+st.markdown("---")
+st.markdown("### 🗣️ Cosa dicono gli utenti")
+col1, col2, col3 = st.columns(3)
+with col1:
+    st.success("⭐⭐⭐⭐⭐\n\n*Amazon mi ignorava da 10 giorni. Ho mandato questa diffida e mi hanno rimborsato la mattina dopo.* \n\n- Marco T.")
+with col2:
+    st.success("⭐⭐⭐⭐⭐\n\n*Il pacco Shein era perso. Tool fantastico, ha citato il codice del consumo perfettamente.* \n\n- Elena R.")
+with col3:
+    st.success("⭐⭐⭐⭐⭐\n\n*Semplice e veloce. Ho recuperato 80€ da un sito truffa.* \n\n- Giovanni L.")
