@@ -56,22 +56,28 @@ if st.button("GENERA DIFFIDA LEGALE CON AI", type="primary", use_container_width
     else:
         with st.spinner('L\'Intelligenza Artificiale sta scrivendo una diffida legale formale...'):
             try:
-                # Prompt ottimizzato per l'IA
                 prompt = f"""
-                Sei un avvocato esperto in diritto del consumo in Italia. 
-                Scrivi una lettera di diffida formale e minacciosa per un cliente che ha avuto un problema con {sito}.
-                Dettagli del problema: {problema}. 
-                Dettagli aggiuntivi: {dettagli}. 
-                Numero ordine: {ordine if ordine else 'Non specificato'}.
-                
-                Nella lettera devi assolutamente:
-                1. Citare il Codice del Consumo (D. Lgs. 206/2005), in particolare gli articoli 61 e 66.
-                2. Intimare il rimborso integrale entro 48 ore.
-                3. Minacciare di segnalare l'accaduto all'AGCM (Autorità Garante della Concorrenza e del Mercato).
-                4. Usare un tono formale, legale e perentorio.
+                Agisci come un cittadino italiano esperto dei propri diritti che scrive una diffida formale in PRIMA PERSONA (usa "Io", "Mio").
+                NON scrivere come un avvocato che difende un cliente. Scrivi come il cliente stesso.
+
+                Dati del problema:
+                - Sito: {sito}
+                - Ordine n.: {ordine if ordine else 'Non specificato'}
+                - Problema riscontrato: {problema}
+                - Cosa è successo: {dettagli}
+
+                Struttura della lettera:
+                1. Intestazione formale (Mittente e Destinatario).
+                2. Oggetto chiaro: Diffida formale e costituzione in mora.
+                3. Corpo: Spiega che hai pagato e non hai ricevuto il servizio/bene (o il rimborso).
+                4. Citazione Legale: Cita il Codice del Consumo (D. Lgs. 206/2005) e l'obbligo di rimborso.
+                5. Ultimatum: Intima il rimborso entro 48 ore.
+                6. Minaccia: Scrivi che in mancanza di rimborso segnalerai l'azienda all'AGCM (Antitrust) e caricherai la pratica su portali di risoluzione controversie.
+
+                Usa un tono fermo, deluso ma risoluto. Non usare termini troppo complessi, deve sembrare scritta da una persona reale che rivuole i suoi soldi.
                 """
 
-                # MODELLO AGGIORNATO QUI: llama-3.3-70b-versatile
+                # Assicurati che il modello sia quello corretto
                 chat_completion = client.chat.completions.create(
                     messages=[{"role": "user", "content": prompt}],
                     model="llama-3.3-70b-versatile", 
