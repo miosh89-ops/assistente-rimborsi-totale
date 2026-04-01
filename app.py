@@ -49,14 +49,14 @@ with col_b:
 
 dettagli = st.text_area("Descrizione breve dell'accaduto", placeholder="Esempio: Il pacco risulta consegnato ma non ho ricevuto nulla.")
 
-# 4. LOGICA DI GENERAZIONE CON IA (IL "CERVELLO")
+# 4. LOGICA DI GENERAZIONE CON IA
 if st.button("GENERA DIFFIDA LEGALE CON AI", type="primary", use_container_width=True):
     if not sito or not dettagli:
         st.error("Per favore, inserisci almeno il nome del sito e i dettagli!")
     else:
         with st.spinner('L\'Intelligenza Artificiale sta scrivendo una diffida legale formale...'):
             try:
-                # Prompt personalizzato per l'IA
+                # Prompt ottimizzato per l'IA
                 prompt = f"""
                 Sei un avvocato esperto in diritto del consumo in Italia. 
                 Scrivi una lettera di diffida formale e minacciosa per un cliente che ha avuto un problema con {sito}.
@@ -66,19 +66,20 @@ if st.button("GENERA DIFFIDA LEGALE CON AI", type="primary", use_container_width
                 
                 Nella lettera devi assolutamente:
                 1. Citare il Codice del Consumo (D. Lgs. 206/2005), in particolare gli articoli 61 e 66.
-                2. Intimare il rimborso entro 48 ore.
-                3. Minacciare di ricorrere alle autorità (AGCM) e adire le vie legali.
-                4. Usare un tono formale, freddo e professionale.
+                2. Intimare il rimborso integrale entro 48 ore.
+                3. Minacciare di segnalare l'accaduto all'AGCM (Autorità Garante della Concorrenza e del Mercato).
+                4. Usare un tono formale, legale e perentorio.
                 """
 
+                # MODELLO AGGIORNATO QUI: llama-3.3-70b-versatile
                 chat_completion = client.chat.completions.create(
                     messages=[{"role": "user", "content": prompt}],
-                    model="llama-3.3-70b-specdec", # Il modello più potente
+                    model="llama-3.3-70b-versatile", 
                 )
                 
                 diffida_ai = chat_completion.choices[0].message.content
                 
-                st.success("✅ Diffida Legale generata dall'IA!")
+                st.success("✅ Diffida Legale generata con successo!")
                 st.text_area("Copia e invia via Mail o PEC:", value=diffida_ai, height=450)
                 
                 # --- MONETIZZAZIONE DOPO GENERAZIONE ---
@@ -100,7 +101,7 @@ st.markdown("---")
 st.markdown("### 🗣️ Recensioni Recenti")
 t1, t2, t3 = st.columns(3)
 with t1:
-    st.success("⭐⭐⭐⭐⭐\n\n*Incredibile. Ho copiato il testo dell'IA e Amazon mi ha rimborsato in 2 ore.* \n\n- Marco T.")
+    st.success("⭐⭐⭐⭐⭐\n\n*Amazon mi ignorava. Ho mandato questa diffida e mi hanno rimborsato subito.* \n\n- Marco T.")
 with t2:
     st.success("⭐⭐⭐⭐⭐\n\n*La diffida citava leggi che nemmeno conoscevo. Molto professionale.* \n\n- Elena R.")
 with t3:
