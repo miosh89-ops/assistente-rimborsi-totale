@@ -61,11 +61,18 @@ if st.button("GENERA DIFFIDA LEGALE"):
                 st.text_area("Copia da qui:", value=risposta, height=400)
                 
                 # MONETIZZAZIONE
-                st.markdown("---")
-                st.subheader("🛡️ Proteggi i tuoi prossimi acquisti")
-                st.link_button("🔥 Attiva Revolut e ricevi il Bonus sicurezza", "IL_TUO_LINK_REVOLUT")
-                st.markdown("---")
-                st.link_button("☕ Offrimi un caffè (Donazione)", "IL_TUO_LINK_DONAZIONE")
+            with st.sidebar:
+    st.image("https://img.icons8.com/color/96/000000/scales.png", width=80)
+    st.title("Supporta il Progetto")
+    st.info("Questo tool è gratuito. Se ti è stato utile, puoi offrirci un caffè tramite i nostri canali sicuri.")
+    
+    # PULSANTE REVOLUT (Il tuo link personale)
+    st.link_button("💳 Offri un caffè con Revolut", "https://revolut.me/gdelgiudice94", use_container_width=True)
+    
+    st.markdown("---")
+    
+    # PULSANTE BUY ME A COFFEE
+    st.link_button("☕ Supporta su Buy Me a Coffee", "https://www.buymeacoffee.com/SmartUtilityLab", use_container_width=True)
                 
             except Exception as e:
                 st.error(f"Errore tecnico: {e}")
