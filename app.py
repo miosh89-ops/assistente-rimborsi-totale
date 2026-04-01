@@ -2,8 +2,11 @@ import streamlit as st
 from groq import Groq
 
 # --- VERIFICA GOOGLE SEARCH CONSOLE ---
-st.write(f'<p style="display:none;">google-site-verification: google-site-verification=FEPUjwHJUUHDgYUqDVK0RoATqLWwq8dcOYgUkcYBZFM</p>', unsafe_allow_html=True)
-st.markdown('<meta name="google-site-verification" content="FEPUjwHJUUHDgYUqDVK0RoAT/qLWwq8dcOYgUkcYBZFM" />', unsafe_allow_html=True)
+st.html(f"""
+    <head>
+        <meta name="google-site-verification" content="FEPUjwHJUUHDgYUqDVK0RoATqLWwq8dcOYgUkcYBZFM" />
+    </head>
+""")
 
 # 1. CONFIGURAZIONE PAGINA
 st.set_page_config(
