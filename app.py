@@ -1,6 +1,9 @@
 import streamlit as st
 from groq import Groq
 
+# --- VERIFICA GOOGLE SEARCH CONSOLE ---
+st.markdown('<meta name="google-site-verification" content="FEPUjwHJUUHDgYUqDVK0RoATqLWwq8dcOYgUkcYBZFM" />', unsafe_allow_html=True)
+
 # 1. CONFIGURAZIONE PAGINA
 st.set_page_config(
     page_title="SmartUtility Lab - Generatore Diffide IA",
