@@ -25,7 +25,7 @@ with st.sidebar:
     # Messaggio di valore
     st.info("""
     **Aiutaci a restare gratuiti!**
-    Sviluppiamo strumenti AI per i cittadini. Se questo tool ti è stato utile, considera una piccola donazione per coprire i costi dei server.
+    Sviluppiamo strumenti AI per i cittadini. Se questo tool ti è stato utile, considera una piccola mancia per coprire i costi dei server.
     """)
     
     # Pulsante Revolut (Il più veloce)
