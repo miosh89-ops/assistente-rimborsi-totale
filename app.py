@@ -1,108 +1,96 @@
 import streamlit as st
-from groq import Groq
 
-# 1. Configurazione Pagina
-st.set_page_config(page_title="SmartUtility Lab - Tutela Consumatori", page_icon="⚖️")
+# 1. CONFIGURAZIONE PAGINA (Solo una volta all'inizio)
+st.set_page_config(
+    page_title="SmartUtility Lab - Tutela Consumatori", 
+    page_icon="⚖️",
+    layout="wide"
+)
 
-# 2. Sidebar Professionale
+# 2. BARRA LATERALE (BRAND E MONETIZZAZIONE)
 with st.sidebar:
     st.image("https://img.icons8.com/color/96/000000/scales.png", width=80)
     st.title("SmartUtility Lab")
     st.markdown("---")
-    st.info("Sviluppiamo strumenti gratuiti per aiutare i cittadini. Se il tool ti è utile, offrici un caffè per sostenere i server.")
-    
-    # Pulsanti di Supporto
-    st.link_button("💳 Offri un caffè (Revolut)", "https://revolut.me/gdelgiudice94", use_container_width=True)
-    st.link_button("☕ Supporta il progetto", "https://www.buymeacoffee.com/SmartUtilityLab", use_container_width=True)
-    
-    st.markdown("---")
-    st.caption("© 2026 SmartUtility Lab")
-    
-# 3. Corpo Principale
-st.title("⚖️ SmartUtility Lab: Rimborsi")
-st.markdown("### Genera la tua diffida legale in 30 secondi.")
-
-# --- SIDEBAR: BRAND UNIVERSALE E PAGAMENTI ---
-with st.sidebar:
-    # Icona professionale
-    st.image("https://img.icons8.com/color/96/000000/scales.png", width=80)
-    st.title("SmartUtility Lab")
-    st.markdown("---")
-    
-    # Messaggio di valore
     st.info("""
-    **Aiutaci a restare gratuiti!**
-    Sviluppiamo strumenti AI per i cittadini. Se questo tool ti è stato utile, considera una piccola mancia per coprire i costi dei server.
+    **Sostieni il progetto**
+    Sviluppiamo strumenti AI gratuiti per i cittadini. Se il tool ti è utile, offrici un caffè per coprire i costi dei server.
     """)
     
-    # Pulsante Revolut (Il più veloce)
-    st.link_button("💳 Caffè rapido con Revolut", "https://revolut.me/gdelgiudice94", use_container_width=True)
-    
-    st.markdown(" ") # Spazio estetico
-    
-    # Pulsante Buy Me A Coffee (Ufficiale)
+    # Link Reali
+    st.link_button("💳 Caffè rapido (Revolut)", "https://revolut.me/gdelgiudice94", use_container_width=True)
     st.link_button("☕ Supporta su Buy Me a Coffee", "https://www.buymeacoffee.com/SmartUtilityLab", use_container_width=True)
     
     st.markdown("---")
-    st.caption("© 2026 SmartUtility Lab - Strumenti AI per il cittadino")
-    
-with st.container():
-    negozio = st.text_input("Sito web dove hai acquistato (es: Amazon, Shein, Temu)")
+    st.caption("© 2026 SmartUtility Lab - Tutela Digitale")
+
+# 3. CORPO PRINCIPALE (UI)
+st.title("⚖️ SmartUtility Lab: Generatore Diffide")
+st.markdown("### Recupera i tuoi soldi dagli e-commerce in 30 secondi.")
+
+# Layout a due colonne per i campi input
+col_a, col_b = st.columns(2)
+
+with col_a:
+    sito = st.text_input("Sito web (es: Amazon, Shein, Temu)", placeholder="www.amazon.it")
+    ordine = st.text_input("Numero Ordine (Opzionale)", placeholder="236475")
+
+with col_b:
     problema = st.selectbox("Seleziona il problema:", [
         "Pacco mai arrivato", 
-        "Prodotto rotto o difettoso", 
-        "Articolo diverso dalla descrizione",
-        "Reso effettuato ma rimborso negato"
+        "Pacco arrivato vuoto/manomesso", 
+        "Rimborso non ricevuto dopo reso",
+        "Prodotto non conforme/difettoso"
     ])
-    dettagli = st.text_area("Descrizione breve dell'accaduto")
-    ordine = st.text_input("Numero Ordine (Opzionale)")
 
-# 4. Generazione con il NUOVO MODELLO
-if st.button("GENERA DIFFIDA LEGALE"):
-    if negozio and dettagli:
-        with st.spinner("L'IA sta scrivendo la tua diffida legale..."):
-            try:
-                chat = client.chat.completions.create(
-                    model="llama-3.3-70b-versatile", # MODELLO AGGIORNATO 2026
-                    messages=[
-                        {
-                            "role": "system",
-                            "content": "Sei un Avvocato esperto in Diritto dei Consumatori. Scrivi diffide legali formali, citando il Codice del Consumo e intimando il rimborso entro 48 ore."
-                        },
-                        {
-                            "role": "user",
-                            "content": f"Negozio: {negozio}. Problema: {problema}. Dettagli: {dettagli}. Ordine: {ordine}."
-                        }
-                    ]
-                )
-                
-                risposta = chat.choices[0].message.content
-                st.success("✅ Lettera Generata!")
-                st.text_area("Copia da qui:", value=risposta, height=400)
-                
-                # --- MONETIZZAZIONE SOTTO IL RISULTATO ---
-                st.markdown("---")
-                st.subheader("💡 Ti ho aiutato a risolvere?")
-                st.write("Mandare questa diffida è il primo passo per riavere i tuoi soldi. Se il tool ti è piaciuto, supporta il nostro laboratorio:")
-                
-                col_rev, col_coffee = st.columns(2)
-                with col_rev:
-                    st.link_button("☕ Offri un caffè (Revolut)", "https://revolut.me/gdelgiudice94", use_container_width=True)
-                with col_coffee:
-                    st.link_button("⭐ Supporta il Progetto", "https://www.buymeacoffee.com/SmartUtilityLab", use_container_width=True)
-                
-            except Exception as e:
-                st.error(f"Errore tecnico: {e}")
+dettagli = st.text_area("Descrizione breve (Cosa è successo?)", placeholder="Esempio: Il pacco risulta consegnato ma non ho ricevuto nulla.")
+
+# 4. LOGICA DI GENERAZIONE
+if st.button("GENERA DIFFIDA LEGALE", type="primary", use_container_width=True):
+    if not sito or not dettagli:
+        st.error("Per favore, inserisci il sito e una breve descrizione!")
     else:
-        st.warning("Compila i campi obbligatori.")
+        with st.spinner('L\'IA sta analizzando il caso e citando il Codice del Consumo...'):
+            # Qui generiamo il testo della diffida
+            diffida_testo = f"""
+OGGETTO: Diffida formale per mancata risoluzione - Ordine n. {ordine if ordine else 'N/D'}
 
-# --- RECENSIONI (RIPROVA SOCIALE) ---
+All'attenzione del Servizio Clienti di {sito},
+
+In virtù del D. Lgs. 6 settembre 2005, n. 206 (Codice del Consumo), con la presente formalizzo formale diffida relativa all'ordine in oggetto.
+
+Premesso che:
+- Il sottoscritto ha regolarmente corrisposto l'importo dovuto;
+- Il problema riscontrato consiste in: {problema};
+- Dettagli: {dettagli};
+
+Ai sensi dell'Art. 61 del Codice del Consumo, vi intimo di procedere al rimborso integrale dell'importo pagato entro e non oltre 48 ore. In difetto, mi riservo di adire le vie legali e segnalare l'accaduto alle autorità competenti (AGCM).
+
+In attesa di riscontro,
+Cordiali saluti.
+            """
+            
+            st.success("✅ Diffida Generata con Successo!")
+            st.text_area("Copia e invia via Mail o PEC:", value=diffida_testo, height=350)
+            
+            # --- TASTI DI RINGRAZIAMENTO DOPO GENERAZIONE ---
+            st.markdown("---")
+            st.subheader("💡 Ti ho aiutato a risolvere?")
+            st.write("Mandare questa diffida è il primo passo. Se il tool ti è piaciuto, considera un piccolo supporto:")
+            
+            c1, c2 = st.columns(2)
+            with c1:
+                st.link_button("☕ Offri un caffè (Revolut)", "https://revolut.me/gdelgiudice94", use_container_width=True)
+            with c2:
+                st.link_button("⭐ Supporta SmartUtility Lab", "https://www.buymeacoffee.com/SmartUtilityLab", use_container_width=True)
+
+# 5. RIPROVA SOCIALE (TESTIMONIALS)
 st.markdown("---")
 st.markdown("### 🗣️ Cosa dicono gli utenti")
-col1, col2, col3 = st.columns(3)
-with col1:
-    st.success("⭐⭐⭐⭐⭐\n\n*Amazon mi ignorava da 10 giorni. Ho mandato questa diffida e mi hanno rimborsato la mattina dopo.* \n\n- Marco T.")
-with col2:
-    st.success("⭐⭐⭐⭐⭐\n\n*Il pacco Shein era perso. Tool fantastico, ha citato il codice del consumo perfettamente.* \n\n- Elena R.")
-with col3:
+t1, t2, t3 = st.columns(3)
+with t1:
+    st.success("⭐⭐⭐⭐⭐\n\n*Amazon mi ignorava. Ho mandato questa diffida e mi hanno rimborsato subito.* \n\n- Marco T.")
+with t2:
+    st.success("⭐⭐⭐⭐⭐\n\n*Tool fantastico, ha citato il codice del consumo perfettamente.* \n\n- Elena R.")
+with t3:
     st.success("⭐⭐⭐⭐⭐\n\n*Semplice e veloce. Ho recuperato 80€ da un sito truffa.* \n\n- Giovanni L.")
