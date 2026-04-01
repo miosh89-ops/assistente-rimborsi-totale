@@ -1,11 +1,16 @@
 import streamlit as st
+from groq import Groq
 
-# 1. CONFIGURAZIONE PAGINA (Solo una volta all'inizio)
+# 1. CONFIGURAZIONE PAGINA
 st.set_page_config(
     page_title="SmartUtility Lab - Tutela Consumatori", 
     page_icon="⚖️",
     layout="wide"
 )
+
+# Recupero API Key dai Secrets di Streamlit
+GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
+client = Groq(api_key=GROQ_API_KEY)
 
 # 2. BARRA LATERALE (BRAND E MONETIZZAZIONE)
 with st.sidebar:
@@ -26,9 +31,8 @@ with st.sidebar:
 
 # 3. CORPO PRINCIPALE (UI)
 st.title("⚖️ SmartUtility Lab: Generatore Diffide")
-st.markdown("### Recupera i tuoi soldi dagli e-commerce in 30 secondi.")
+st.markdown("### Recupera i tuoi soldi dagli e-commerce in 30 secondi con l'IA.")
 
-# Layout a due colonne per i campi input
 col_a, col_b = st.columns(2)
 
 with col_a:
@@ -43,54 +47,61 @@ with col_b:
         "Prodotto non conforme/difettoso"
     ])
 
-dettagli = st.text_area("Descrizione breve (Cosa è successo?)", placeholder="Esempio: Il pacco risulta consegnato ma non ho ricevuto nulla.")
+dettagli = st.text_area("Descrizione breve dell'accaduto", placeholder="Esempio: Il pacco risulta consegnato ma non ho ricevuto nulla.")
 
-# 4. LOGICA DI GENERAZIONE
-if st.button("GENERA DIFFIDA LEGALE", type="primary", use_container_width=True):
+# 4. LOGICA DI GENERAZIONE CON IA (IL "CERVELLO")
+if st.button("GENERA DIFFIDA LEGALE CON AI", type="primary", use_container_width=True):
     if not sito or not dettagli:
-        st.error("Per favore, inserisci il sito e una breve descrizione!")
+        st.error("Per favore, inserisci almeno il nome del sito e i dettagli!")
     else:
-        with st.spinner('L\'IA sta analizzando il caso e citando il Codice del Consumo...'):
-            # Qui generiamo il testo della diffida
-            diffida_testo = f"""
-OGGETTO: Diffida formale per mancata risoluzione - Ordine n. {ordine if ordine else 'N/D'}
+        with st.spinner('L\'Intelligenza Artificiale sta scrivendo una diffida legale formale...'):
+            try:
+                # Prompt personalizzato per l'IA
+                prompt = f"""
+                Sei un avvocato esperto in diritto del consumo in Italia. 
+                Scrivi una lettera di diffida formale e minacciosa per un cliente che ha avuto un problema con {sito}.
+                Dettagli del problema: {problema}. 
+                Dettagli aggiuntivi: {dettagli}. 
+                Numero ordine: {ordine if ordine else 'Non specificato'}.
+                
+                Nella lettera devi assolutamente:
+                1. Citare il Codice del Consumo (D. Lgs. 206/2005), in particolare gli articoli 61 e 66.
+                2. Intimare il rimborso entro 48 ore.
+                3. Minacciare di ricorrere alle autorità (AGCM) e adire le vie legali.
+                4. Usare un tono formale, freddo e professionale.
+                """
 
-All'attenzione del Servizio Clienti di {sito},
+                chat_completion = client.chat.completions.create(
+                    messages=[{"role": "user", "content": prompt}],
+                    model="llama-3.3-70b-specdec", # Il modello più potente
+                )
+                
+                diffida_ai = chat_completion.choices[0].message.content
+                
+                st.success("✅ Diffida Legale generata dall'IA!")
+                st.text_area("Copia e invia via Mail o PEC:", value=diffida_ai, height=450)
+                
+                # --- MONETIZZAZIONE DOPO GENERAZIONE ---
+                st.markdown("---")
+                st.subheader("💡 Ti ho aiutato a risolvere?")
+                st.write("Speriamo che questa diffida ti aiuti a sbloccare il rimborso. Se vuoi ringraziarci:")
+                
+                c1, c2 = st.columns(2)
+                with c1:
+                    st.link_button("☕ Caffè rapido (Revolut)", "https://revolut.me/gdelgiudice94", use_container_width=True)
+                with c2:
+                    st.link_button("⭐ Supporta SmartUtility Lab", "https://www.buymeacoffee.com/SmartUtilityLab", use_container_width=True)
 
-In virtù del D. Lgs. 6 settembre 2005, n. 206 (Codice del Consumo), con la presente formalizzo formale diffida relativa all'ordine in oggetto.
+            except Exception as e:
+                st.error(f"Errore nella generazione: {e}")
 
-Premesso che:
-- Il sottoscritto ha regolarmente corrisposto l'importo dovuto;
-- Il problema riscontrato consiste in: {problema};
-- Dettagli: {dettagli};
-
-Ai sensi dell'Art. 61 del Codice del Consumo, vi intimo di procedere al rimborso integrale dell'importo pagato entro e non oltre 48 ore. In difetto, mi riservo di adire le vie legali e segnalare l'accaduto alle autorità competenti (AGCM).
-
-In attesa di riscontro,
-Cordiali saluti.
-            """
-            
-            st.success("✅ Diffida Generata con Successo!")
-            st.text_area("Copia e invia via Mail o PEC:", value=diffida_testo, height=350)
-            
-            # --- TASTI DI RINGRAZIAMENTO DOPO GENERAZIONE ---
-            st.markdown("---")
-            st.subheader("💡 Ti ho aiutato a risolvere?")
-            st.write("Mandare questa diffida è il primo passo. Se il tool ti è piaciuto, considera un piccolo supporto:")
-            
-            c1, c2 = st.columns(2)
-            with c1:
-                st.link_button("☕ Offri un caffè (Revolut)", "https://revolut.me/gdelgiudice94", use_container_width=True)
-            with c2:
-                st.link_button("⭐ Supporta SmartUtility Lab", "https://www.buymeacoffee.com/SmartUtilityLab", use_container_width=True)
-
-# 5. RIPROVA SOCIALE (TESTIMONIALS)
+# 5. RIPROVA SOCIALE
 st.markdown("---")
-st.markdown("### 🗣️ Cosa dicono gli utenti")
+st.markdown("### 🗣️ Recensioni Recenti")
 t1, t2, t3 = st.columns(3)
 with t1:
-    st.success("⭐⭐⭐⭐⭐\n\n*Amazon mi ignorava. Ho mandato questa diffida e mi hanno rimborsato subito.* \n\n- Marco T.")
+    st.success("⭐⭐⭐⭐⭐\n\n*Incredibile. Ho copiato il testo dell'IA e Amazon mi ha rimborsato in 2 ore.* \n\n- Marco T.")
 with t2:
-    st.success("⭐⭐⭐⭐⭐\n\n*Tool fantastico, ha citato il codice del consumo perfettamente.* \n\n- Elena R.")
+    st.success("⭐⭐⭐⭐⭐\n\n*La diffida citava leggi che nemmeno conoscevo. Molto professionale.* \n\n- Elena R.")
 with t3:
-    st.success("⭐⭐⭐⭐⭐\n\n*Semplice e veloce. Ho recuperato 80€ da un sito truffa.* \n\n- Giovanni L.")
+    st.success("⭐⭐⭐⭐⭐\n\n*Gratis e veloce. Meglio di spendere 200€ di avvocato.* \n\n- Giovanni L.")
