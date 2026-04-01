@@ -15,16 +15,29 @@ except Exception:
 st.title("⚖️ Rimborso Rapido AI")
 st.markdown("### Recupera i tuoi soldi dagli e-commerce in 30 secondi.")
 
-# --- BARRA LATERALE (MONETIZZAZIONE ELEGANTE) ---
+# --- SIDEBAR: BRAND UNIVERSALE E PAGAMENTI ---
 with st.sidebar:
+    # Icona professionale
     st.image("https://img.icons8.com/color/96/000000/scales.png", width=80)
-    st.title("Sponsor Ufficiale")
-    st.info("💳 Non farti più fregare online. Proteggi i tuoi acquisti futuri con una carta sicura e notifiche in tempo reale.")
-    st.link_button("👉 Richiedi Carta Revolut (Bonus)", "IL_TUO_LINK_REVOLUT", use_container_width=True)
+    st.title("SmartUtility Lab")
+    st.markdown("---")
+    
+    # Messaggio di valore
+    st.info("""
+    **Aiutaci a restare gratuiti!**
+    Sviluppiamo strumenti AI per i cittadini. Se questo tool ti è stato utile, considera una piccola donazione per coprire i costi dei server.
+    """)
+    
+    # Pulsante Revolut (Il più veloce)
+    st.link_button("💳 Caffè rapido con Revolut", "https://revolut.me/gdelgiudice94", use_container_width=True)
+    
+    st.markdown(" ") # Spazio estetico
+    
+    # Pulsante Buy Me A Coffee (Ufficiale)
+    st.link_button("☕ Supporta su Buy Me a Coffee", "https://www.buymeacoffee.com/SmartUtilityLab", use_container_width=True)
     
     st.markdown("---")
-    st.write("Questo tool legale è 100% gratuito. Se ti ho fatto recuperare i tuoi soldi, considera di supportare il progetto:")
-    st.link_button("☕ Offrimi un caffè", "IL_TUO_LINK_DONAZIONE", use_container_width=True)
+    st.caption("© 2026 SmartUtility Lab - Strumenti AI per il cittadino")
     
 with st.container():
     negozio = st.text_input("Sito web dove hai acquistato (es: Amazon, Shein, Temu)")
@@ -60,19 +73,16 @@ if st.button("GENERA DIFFIDA LEGALE"):
                 st.success("✅ Lettera Generata!")
                 st.text_area("Copia da qui:", value=risposta, height=400)
                 
-                # MONETIZZAZIONE
-            with st.sidebar:
-    st.image("https://img.icons8.com/color/96/000000/scales.png", width=80)
-    st.title("Supporta il Progetto")
-    st.info("Questo tool è gratuito. Se ti è stato utile, puoi offrirci un caffè tramite i nostri canali sicuri.")
-    
-    # PULSANTE REVOLUT (Il tuo link personale)
-    st.link_button("💳 Offri un caffè con Revolut", "https://revolut.me/gdelgiudice94", use_container_width=True)
-    
-    st.markdown("---")
-    
-    # PULSANTE BUY ME A COFFEE
-    st.link_button("☕ Supporta su Buy Me a Coffee", "https://www.buymeacoffee.com/SmartUtilityLab", use_container_width=True)
+                # --- MONETIZZAZIONE SOTTO IL RISULTATO ---
+                st.markdown("---")
+                st.subheader("💡 Ti ho aiutato a risolvere?")
+                st.write("Mandare questa diffida è il primo passo per riavere i tuoi soldi. Se il tool ti è piaciuto, supporta il nostro laboratorio:")
+                
+                col_rev, col_coffee = st.columns(2)
+                with col_rev:
+                    st.link_button("☕ Offri un caffè (Revolut)", "https://revolut.me/gdelgiudice94", use_container_width=True)
+                with col_coffee:
+                    st.link_button("⭐ Supporta il Progetto", "https://www.buymeacoffee.com/SmartUtilityLab", use_container_width=True)
                 
             except Exception as e:
                 st.error(f"Errore tecnico: {e}")
