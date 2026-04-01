@@ -3,9 +3,12 @@ from groq import Groq
 
 # 1. CONFIGURAZIONE PAGINA
 st.set_page_config(
-    page_title="SmartUtility Lab - Tutela Consumatori", 
+    page_title="SmartUtility Lab - Generatore Diffide IA",
     page_icon="⚖️",
-    layout="wide"
+    menu_items={
+        'Get Help': 'https://revolut.me/gdelgiudice94',
+        'About': "# SmartUtility Lab\nTool AI gratuito per rimborsi e tutela consumatori."
+    }
 )
 
 # Recupero API Key dai Secrets di Streamlit
