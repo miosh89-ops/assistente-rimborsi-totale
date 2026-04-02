@@ -5,7 +5,7 @@ from groq import Groq
 st.set_page_config(
     page_title="SmartUtility Lab - Generatore Diffide IA",
     page_icon="⚖️",
-    layout="wide",
+    layout="centered",
     menu_items={
         'Get Help': 'https://revolut.me/gdelgiudice94',
         'About': "# SmartUtility Lab\nTool AI gratuito per rimborsi e tutela consumatori."
