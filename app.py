@@ -5,6 +5,7 @@ from groq import Groq
 st.set_page_config(
     page_title="SmartUtility Lab - Generatore Diffide IA",
     page_icon="⚖️",
+    layout="wide",
     menu_items={
         'Get Help': 'https://revolut.me/gdelgiudice94',
         'About': "# SmartUtility Lab\nTool AI gratuito per rimborsi e tutela consumatori."
@@ -15,7 +16,7 @@ st.set_page_config(
 GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
 client = Groq(api_key=GROQ_API_KEY)
 
-# 2. BARRA LATERALE (BRAND E MONETIZZAZIONE)
+# 2. BARRA LATERALE (VISIBILE SU PC)
 with st.sidebar:
     st.image("https://img.icons8.com/color/96/000000/scales.png", width=80)
     st.title("SmartUtility Lab")
@@ -25,7 +26,6 @@ with st.sidebar:
     Sviluppiamo strumenti AI gratuiti per i cittadini. Se il tool ti è utile, offrici un caffè per coprire i costi dei server.
     """)
     
-    # Link Reali
     st.link_button("💳 Caffè rapido (Revolut)", "https://revolut.me/gdelgiudice94", use_container_width=True)
     st.link_button("☕ Supporta su Buy Me a Coffee", "https://www.buymeacoffee.com/SmartUtilityLab", use_container_width=True)
     
@@ -36,6 +36,17 @@ with st.sidebar:
 st.title("⚖️ SmartUtility Lab: Generatore Diffide")
 st.markdown("### Recupera i tuoi soldi dagli e-commerce in 30 secondi con l'IA.")
 
+# --- MIGLIORAMENTO MOBILE: TASTI SUBITO VISIBILI ---
+st.success("💡 **Strumento 100% Gratuito.** Se ti aiutiamo a recuperare i soldi o ti facciamo risparmiare tempo, considera di supportare il progetto!")
+col_top1, col_top2 = st.columns(2)
+with col_top1:
+    st.link_button("☕ Offrimi un Caffè (Revolut)", "https://revolut.me/gdelgiudice94", use_container_width=True)
+with col_top2:
+    st.link_button("⭐ Supporta il Progetto", "https://www.buymeacoffee.com/SmartUtilityLab", use_container_width=True)
+
+st.markdown("---")
+
+# CAMPI DI INPUT
 col_a, col_b = st.columns(2)
 
 with col_a:
@@ -55,7 +66,7 @@ dettagli = st.text_area("Descrizione breve dell'accaduto", placeholder="Esempio:
 # 4. LOGICA DI GENERAZIONE CON IA
 if st.button("GENERA DIFFIDA LEGALE CON AI", type="primary", use_container_width=True):
     if not sito or not dettagli:
-        st.error("Per favore, inserisci almeno il nome del sito e i dettagli!")
+        st.error("Per favore, inserisci almeno il nome del sito e i dettagli dell'accaduto!")
     else:
         with st.spinner('L\'Intelligenza Artificiale sta scrivendo una diffida legale formale...'):
             try:
@@ -80,7 +91,6 @@ if st.button("GENERA DIFFIDA LEGALE CON AI", type="primary", use_container_width
                 Usa un tono fermo, deluso ma risoluto. Non usare termini troppo complessi, deve sembrare scritta da una persona reale che rivuole i suoi soldi.
                 """
 
-                # Assicurati che il modello sia quello corretto
                 chat_completion = client.chat.completions.create(
                     messages=[{"role": "user", "content": prompt}],
                     model="llama-3.3-70b-versatile", 
@@ -88,19 +98,22 @@ if st.button("GENERA DIFFIDA LEGALE CON AI", type="primary", use_container_width
                 
                 diffida_ai = chat_completion.choices[0].message.content
                 
-                st.success("✅ Diffida Legale generata con successo!")
-                st.text_area("Copia e invia via Mail o PEC:", value=diffida_ai, height=450)
+                st.success("✅ Diffida Legale generata con successo! Copiala e inviala via Mail o PEC.")
+                st.text_area("Testo della Diffida:", value=diffida_ai, height=450)
                 
-                # --- MONETIZZAZIONE DOPO GENERAZIONE ---
+                # --- MIGLIORAMENTO: TESTO EMOZIONALE POST-GENERAZIONE ---
                 st.markdown("---")
-                st.subheader("💡 Ti ho aiutato a risolvere?")
-                st.write("Speriamo che questa diffida ti aiuti a sbloccare il rimborso. Se vuoi ringraziarci:")
+                st.subheader("🎯 Ti abbiamo fatto risparmiare tempo e stress?")
+                st.write("""
+                Un avvocato ti avrebbe chiesto almeno 100€ per scrivere questa lettera. Noi te l'abbiamo fornita gratis in pochi secondi. 
+                Se la lettera ti aiuterà a sbloccare il rimborso, **offrici un caffè per permetterci di mantenere il sito online e gratuito per tutti!** 👇
+                """)
                 
                 c1, c2 = st.columns(2)
                 with c1:
-                    st.link_button("☕ Caffè rapido (Revolut)", "https://revolut.me/gdelgiudice94", use_container_width=True)
+                    st.link_button("☕ Invia un Caffè (Revolut)", "https://revolut.me/gdelgiudice94", use_container_width=True)
                 with c2:
-                    st.link_button("⭐ Supporta SmartUtility Lab", "https://www.buymeacoffee.com/SmartUtilityLab", use_container_width=True)
+                    st.link_button("⭐ Lascia una Mancia", "https://www.buymeacoffee.com/SmartUtilityLab", use_container_width=True)
 
             except Exception as e:
                 st.error(f"Errore nella generazione: {e}")
@@ -110,8 +123,12 @@ st.markdown("---")
 st.markdown("### 🗣️ Recensioni Recenti")
 t1, t2, t3 = st.columns(3)
 with t1:
-    st.success("⭐⭐⭐⭐⭐\n\n*Amazon mi ignorava. Ho mandato questa diffida e mi hanno rimborsato subito.* \n\n- Marco T.")
+    st.info("⭐⭐⭐⭐⭐\n\n*Amazon mi ignorava. Ho mandato questa diffida e mi hanno rimborsato subito.* \n\n- Marco T.")
 with t2:
-    st.success("⭐⭐⭐⭐⭐\n\n*La diffida citava leggi che nemmeno conoscevo. Molto professionale.* \n\n- Elena R.")
+    st.info("⭐⭐⭐⭐⭐\n\n*La diffida citava leggi che nemmeno conoscevo. Molto professionale.* \n\n- Elena R.")
 with t3:
-    st.success("⭐⭐⭐⭐⭐\n\n*Gratis e veloce. Meglio di spendere 200€ di avvocato.* \n\n- Giovanni L.")
+    st.info("⭐⭐⭐⭐⭐\n\n*Gratis e veloce. Meglio di spendere 200€ di avvocato.* \n\n- Giovanni L.")
+
+# 6. DISCLAIMER LEGALE
+st.markdown("---")
+st.caption("⚠️ **Disclaimer:** I testi generati da SmartUtility Lab sono basati su modelli linguistici di intelligenza artificiale. Sebbene siano strutturati per riflettere le normative a tutela del consumatore, non costituiscono parere legale ufficiale. Verifica sempre i dati prima dell'invio.")
