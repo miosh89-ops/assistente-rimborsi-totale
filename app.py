@@ -5,54 +5,78 @@ from groq import Groq
 st.set_page_config(
     page_title="SmartUtility Lab - Generatore Diffide IA",
     page_icon="⚖️",
-    layout="centered",
+    layout="centered", # Torniamo al layout centrato come concordato
     menu_items={
         'Get Help': 'https://revolut.me/gdelgiudice94',
         'About': "# SmartUtility Lab\nTool AI gratuito per rimborsi e tutela consumatori."
     }
 )
 
-# Recupero API Key dai Secrets di Streamlit
+# --- CSS PERSONALIZZATO PER MIGLIORARE IL LOOK ---
+st.markdown("""
+    <style>
+    /* Cambia il colore del tasto principale */
+    div.stButton > button:first-child {
+        background-color: #004a99;
+        color: white;
+        border-radius: 10px;
+        border: none;
+        height: 3em;
+        font-weight: bold;
+        transition: all 0.3s;
+    }
+    div.stButton > button:first-child:hover {
+        background-color: #003366;
+        border: none;
+        transform: scale(1.02);
+    }
+    /* Arrotonda i box delle recensioni */
+    .stAlert {
+        border-radius: 15px;
+    }
+    /* Stile per il titolo */
+    h1 {
+        color: #1E1E1E;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+# Recupero API Key dai Secrets
 GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
 client = Groq(api_key=GROQ_API_KEY)
 
-# 2. BARRA LATERALE (VISIBILE SU PC)
+# 2. BARRA LATERALE
 with st.sidebar:
     st.image("https://img.icons8.com/color/96/000000/scales.png", width=80)
     st.title("SmartUtility Lab")
     st.markdown("---")
-    st.info("""
-    **Sostieni il progetto**
-    Sviluppiamo strumenti AI gratuiti per i cittadini. Se il tool ti è utile, offrici un caffè per coprire i costi dei server.
-    """)
-    
+    st.info("**Sostieni il progetto**\nSviluppiamo strumenti AI gratuiti. Se il tool ti è utile, offrici un caffè!")
     st.link_button("💳 Caffè rapido (Revolut)", "https://revolut.me/gdelgiudice94", use_container_width=True)
     st.link_button("☕ Supporta su Buy Me a Coffee", "https://www.buymeacoffee.com/SmartUtilityLab", use_container_width=True)
-    
     st.markdown("---")
-    st.caption("© 2026 SmartUtility Lab - Tutela Digitale")
+    st.caption("© 2026 SmartUtility Lab")
 
-# 3. CORPO PRINCIPALE (UI)
+# 3. CORPO PRINCIPALE
 st.title("⚖️ SmartUtility Lab: Generatore Diffide")
-st.markdown("### Recupera i tuoi soldi dagli e-commerce in 30 secondi con l'IA.")
+st.markdown("##### Recupera i tuoi soldi dagli e-commerce in 30 secondi con l'IA.")
 
-# --- MIGLIORAMENTO MOBILE: TASTI SUBITO VISIBILI ---
-st.success("💡 **Strumento 100% Gratuito.** Se ti aiutiamo a recuperare i soldi o ti facciamo risparmiare tempo, considera di supportare il progetto!")
-col_top1, col_top2 = st.columns(2)
-with col_top1:
-    st.link_button("☕ Offrimi un Caffè (Revolut)", "https://revolut.me/gdelgiudice94", use_container_width=True)
-with col_top2:
-    st.link_button("⭐ Supporta il Progetto", "https://www.buymeacoffee.com/SmartUtilityLab", use_container_width=True)
+# Box informativo e tasti donazione subito visibili (soprattutto su mobile)
+with st.container():
+    st.success("💡 **Strumento 100% Gratuito.** Se risparmi tempo o denaro, considera una piccola donazione!")
+    c_top1, c_top2 = st.columns(2)
+    with c_top1:
+        st.link_button("☕ Offrimi un Caffè (Revolut)", "https://revolut.me/gdelgiudice94", use_container_width=True)
+    with c_top2:
+        st.link_button("⭐ Supporta il Progetto", "https://www.buymeacoffee.com/SmartUtilityLab", use_container_width=True)
 
 st.markdown("---")
 
-# CAMPI DI INPUT
+# INPUT UTENTE
 col_a, col_b = st.columns(2)
-
 with col_a:
-    sito = st.text_input("Sito web (es: Amazon, Shein, Temu)", placeholder="www.amazon.it")
-    ordine = st.text_input("Numero Ordine (Opzionale)", placeholder="236475")
-
+    sito = st.text_input("Sito web", placeholder="Esempio: Amazon, Shein, Temu")
+    ordine = st.text_input("Numero Ordine (Opzionale)", placeholder="es: 403-1234567")
 with col_b:
     problema = st.selectbox("Seleziona il problema:", [
         "Pacco mai arrivato", 
@@ -61,74 +85,46 @@ with col_b:
         "Prodotto non conforme/difettoso"
     ])
 
-dettagli = st.text_area("Descrizione breve dell'accaduto", placeholder="Esempio: Il pacco risulta consegnato ma non ho ricevuto nulla.")
+dettagli = st.text_area("Cosa è successo? (Sii breve)", placeholder="Esempio: Il tracking dice consegnato ma non ho ricevuto nulla.")
 
-# 4. LOGICA DI GENERAZIONE CON IA
-if st.button("GENERA DIFFIDA LEGALE CON AI", type="primary", use_container_width=True):
+# GENERAZIONE
+if st.button("🚀 GENERA DIFFIDA ORA", use_container_width=True):
     if not sito or not dettagli:
-        st.error("Per favore, inserisci almeno il nome del sito e i dettagli dell'accaduto!")
+        st.error("Inserisci il nome del sito e i dettagli!")
     else:
-        with st.spinner('L\'Intelligenza Artificiale sta scrivendo una diffida legale formale...'):
+        with st.spinner('L\'IA sta scrivendo...'):
             try:
                 prompt = f"""
-                Agisci come un cittadino italiano esperto dei propri diritti che scrive una diffida formale in PRIMA PERSONA (usa "Io", "Mio").
-                NON scrivere come un avvocato che difende un cliente. Scrivi come il cliente stesso.
-
-                Dati del problema:
-                - Sito: {sito}
-                - Ordine n.: {ordine if ordine else 'Non specificato'}
-                - Problema riscontrato: {problema}
-                - Cosa è successo: {dettagli}
-
-                Struttura della lettera:
-                1. Intestazione formale (Mittente e Destinatario).
-                2. Oggetto chiaro: Diffida formale e costituzione in mora.
-                3. Corpo: Spiega che hai pagato e non hai ricevuto il servizio/bene (o il rimborso).
-                4. Citazione Legale: Cita il Codice del Consumo (D. Lgs. 206/2005) e l'obbligo di rimborso.
-                5. Ultimatum: Intima il rimborso entro 48 ore.
-                6. Minaccia: Scrivi che in mancanza di rimborso segnalerai l'azienda all'AGCM (Antitrust) e caricherai la pratica su portali di risoluzione controversie.
-
-                Usa un tono fermo, deluso ma risoluto. Non usare termini troppo complessi, deve sembrare scritta da una persona reale che rivuole i suoi soldi.
+                Agisci come un cittadino italiano esperto dei propri diritti. Scrivi una diffida formale in PRIMA PERSONA.
+                Dati: Sito {sito}, Ordine {ordine}, Problema {problema}, Dettagli {dettagli}.
+                Includi: Mittente, Destinatario, Oggetto, Codice del Consumo (D. Lgs. 206/2005), termine 48h, minaccia AGCM.
+                Tono: Fermo e risoluto.
                 """
-
                 chat_completion = client.chat.completions.create(
                     messages=[{"role": "user", "content": prompt}],
                     model="llama-3.3-70b-versatile", 
                 )
-                
                 diffida_ai = chat_completion.choices[0].message.content
                 
-                st.success("✅ Diffida Legale generata con successo! Copiala e inviala via Mail o PEC.")
-                st.text_area("Testo della Diffida:", value=diffida_ai, height=450)
+                st.success("✅ Diffida Pronta!")
+                st.text_area("Copia il testo qui sotto:", value=diffida_ai, height=400)
                 
-                # --- MIGLIORAMENTO: TESTO EMOZIONALE POST-GENERAZIONE ---
-                st.markdown("---")
-                st.subheader("🎯 Ti abbiamo fatto risparmiare tempo e stress?")
-                st.write("""
-                Un avvocato ti avrebbe chiesto almeno 100€ per scrivere questa lettera. Noi te l'abbiamo fornita gratis in pochi secondi. 
-                Se la lettera ti aiuterà a sbloccare il rimborso, **offrici un caffè per permetterci di mantenere il sito online e gratuito per tutti!** 👇
-                """)
-                
-                c1, c2 = st.columns(2)
-                with c1:
-                    st.link_button("☕ Invia un Caffè (Revolut)", "https://revolut.me/gdelgiudice94", use_container_width=True)
-                with c2:
-                    st.link_button("⭐ Lascia una Mancia", "https://www.buymeacoffee.com/SmartUtilityLab", use_container_width=True)
-
+                # Tasti post-generazione
+                st.info("🎯 **Ti abbiamo fatto risparmiare tempo e stress?** Offrici un caffè per ringraziarci!")
+                st.link_button("☕ Invia un Caffè (Revolut)", "https://revolut.me/gdelgiudice94", use_container_width=True)
             except Exception as e:
-                st.error(f"Errore nella generazione: {e}")
+                st.error(f"Errore: {e}")
 
-# 5. RIPROVA SOCIALE
+# RECENSIONI
 st.markdown("---")
-st.markdown("### 🗣️ Recensioni Recenti")
+st.subheader("🗣️ Cosa dicono gli utenti")
 t1, t2, t3 = st.columns(3)
 with t1:
-    st.info("⭐⭐⭐⭐⭐\n\n*Amazon mi ignorava. Ho mandato questa diffida e mi hanno rimborsato subito.* \n\n- Marco T.")
+    st.info("⭐⭐⭐⭐⭐\n\n*Rimborsato in 24h dopo aver inviato questo testo ad Amazon!*")
 with t2:
-    st.info("⭐⭐⭐⭐⭐\n\n*La diffida citava leggi che nemmeno conoscevo. Molto professionale.* \n\n- Elena R.")
+    st.info("⭐⭐⭐⭐⭐\n\n*Facilissimo da usare, professionale e gratuito.*")
 with t3:
-    st.info("⭐⭐⭐⭐⭐\n\n*Gratis e veloce. Meglio di spendere 200€ di avvocato.* \n\n- Giovanni L.")
+    st.info("⭐⭐⭐⭐⭐\n\n*Un risparmio di tempo incredibile. Consigliatissimo!*")
 
-# 6. DISCLAIMER LEGALE
 st.markdown("---")
-st.caption("⚠️ **Disclaimer:** I testi generati da SmartUtility Lab sono basati su modelli linguistici di intelligenza artificiale. Sebbene siano strutturati per riflettere le normative a tutela del consumatore, non costituiscono parere legale ufficiale. Verifica sempre i dati prima dell'invio.")
+st.caption("⚠️ **Disclaimer:** Questo tool utilizza l'IA e non sostituisce un parere legale ufficiale.")
